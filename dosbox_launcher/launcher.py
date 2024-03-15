@@ -36,10 +36,8 @@ def main():
             print("found config file: ", file)
             dosbox_conf = os.path.join(folder, file)
             break
-
-    if not os.path.exists(dosbox_conf):
+    else:
         print("missing config file, will assume defaults")
-        dosbox_conf = None
 
     # get a list of all of the subfolders in the folder
     subfolders = [f for f in os.listdir(folder) 
@@ -55,8 +53,12 @@ def main():
         sys.exit(1)
         # change the working directory to the folder
     os.chdir(folder)
-    subprocess.run([DOSBOX_LOCATION, "-conf", dosbox_conf, "-c",
-                    "mount c " + gamedrive, "-c", "c:"])
+    if dosbox_conf:
+        subprocess.run([DOSBOX_LOCATION, "-conf", dosbox_conf, "-c",
+                        "mount c " + gamedrive, "-c", "c:"])
+    else:
+        subprocess.run([DOSBOX_LOCATION, "-c",
+                        "mount c " + gamedrive, "-c", "c:"])
 
 
 if __name__ == "__main__":
