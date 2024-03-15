@@ -4,13 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["Joe Cotellese <joe@cotellese.net>"]
 readme = "README.md"
+license = "MIT"
 
 [tool.poetry.scripts]
 dbl = "dosbox_launcher.launcher:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-
 
 [build-system]
 requires = ["poetry-core"]
