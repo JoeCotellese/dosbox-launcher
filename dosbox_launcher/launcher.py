@@ -23,8 +23,14 @@ def main():
         print("Folder does not exist")
         sys.exit(1)
 
-    # Check if the folder contains a dosbox.conf file
-    dosbox_conf = os.path.join(folder, "dosbox.conf")
+    # Check if the folder contains a dosbox.conf or a dosbox-x config file
+    dosbox_conf = None
+    for file in os.listdir(folder):
+        if file.lower() == "dosbox.conf" or file.lower() == "dosbox-x.conf":
+            print("found config file: ", file)
+            dosbox_conf = os.path.join(folder, file)
+            break
+
     if not os.path.exists(dosbox_conf):
         print("missing config file, will assume defaults")
         dosbox_conf = None
@@ -32,14 +38,16 @@ def main():
     # get a list of all of the subfolders in the folder
     subfolders = [f for f in os.listdir(folder) 
                   if os.path.isdir(os.path.join(folder, f))]
-    if len(subfolders) != 1:
-        print("missing game folder, or I can't tell which one to use.  I found these: ", subfolders)
+    # find "C.disk or C.harddrive" in subfolders
+    for gamedrive in subfolders:
+        print("checking for game folder: ", gamedrive)
+        if gamedrive == "C.disk" or gamedrive == "C.harddrive":
+            print("found game folder: ", gamedrive)
+            break
+    else:
+        print("missing game folder")
         sys.exit(1)
-    gamedrive = subfolders[0]   
-    # if not os.path.exists(gamedrive):
-    #     print(f"missing game folder {gamedrive}")
-    #     sys.exit(1)
-
+        
     # Launch dosbox
     DOSBOX_LOCATION = "/Applications/dosbox-x.app/Contents/MacOS/dosbox-x"
     # change the working directory to the folder
