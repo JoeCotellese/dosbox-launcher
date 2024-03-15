@@ -8,15 +8,21 @@ import os
 import subprocess
 import sys
 
+# Global Config
+DOSBOX_LOCATION = "/Applications/dosbox-x.app/Contents/MacOS/dosbox-x"
+GAMES_FOLDER = "/Volumes/External/DOSBox"
+
 
 def main():
     # Check if the user has provided a folder
     if len(sys.argv) < 2:
-        print("Usage: python launcher.py <folder>")
+        print("Usage: python launcher.py <gamename>")
         sys.exit(1)
 
     # Get the folder name
-    folder = sys.argv[1]
+    game_name = sys.argv[1]
+
+    folder = os.path.join(GAMES_FOLDER, game_name)
 
     # Check if the folder exists
     if not os.path.exists(folder):
@@ -47,10 +53,7 @@ def main():
     else:
         print("missing game folder")
         sys.exit(1)
-        
-    # Launch dosbox
-    DOSBOX_LOCATION = "/Applications/dosbox-x.app/Contents/MacOS/dosbox-x"
-    # change the working directory to the folder
+        # change the working directory to the folder
     os.chdir(folder)
     subprocess.run([DOSBOX_LOCATION, "-conf", dosbox_conf, "-c",
                     "mount c " + gamedrive, "-c", "c:"])
